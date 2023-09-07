@@ -1,0 +1,22 @@
+{
+  "name": "adabot",
+  "version": "1.0.0",
+  "description": "Neste projeto o nosso objetivo é criar um bot para discord. O código do bot deverá utilizar programação orientada a objetos, ou seja, deve usar funcionalidades tais como classes, métodos, atributos, etc... não é necessário utilizar tudo o que foi abordado durante as aulas, utilizamos o que faz sentido utilizar em cada situação.",
+  "main": "src/index",
+  "scripts": {
+    "dev": "tsx watch src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "14.13.0",
+    "dotenv": "16.3.1",
+    "node-fetch": "3.3.2",
+    "unsplash-js": "7.0.18"
+  },
+  "devDependencies": {
+    "tsx": "3.12.8"
+  },
+  "type": "module"
+}
