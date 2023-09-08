@@ -22,14 +22,13 @@ client.on('guildCreate', (guild) => {
   const botUsername = client.user.username
   const botName = client.user.displayName
   const botId = client.user.id
-
-
+  
   const botAccount = new Account({
     id: botId,
     name: botName,
     username: botUsername,
   })
-
+  
   Account.create(botAccount)
 })
 
@@ -40,7 +39,6 @@ client.on('messageCreate', (message) => {
 
   const messageHasPrefix = message.content.startsWith(process.env.BOT_PREFIX)
   if (!messageHasPrefix) return
-  
   
   const args = message.content.slice(process.env.BOT_PREFIX.length).trim().split(/ +/)
   const commandName = args.shift().toLowerCase()
@@ -68,37 +66,6 @@ client.on('messageCreate', (message) => {
       args
     })
   }
-
-  // if (command === 'trabalhar') {
-
-  // }
-
-  // if (command === 'conta') {
-  //   const response = authorAccount.getAccountInfo()
-  //   message.reply(JSON.stringify(response))
-  //   return
-  // }
-
-  // if (command === 'transferir') {
-  //   const targetAccount = args[0]
-  //   const amount = Number(args[1])
-
-  //   if (!targetAccount || isNaN(amount)) {
-  //     message.reply('Inválido')
-  //     return
-  //   }
-
-  //   const response = authorAccount.transferMoney({
-  //     targetAccount,
-  //     amount,
-  //   })
-
-  //   message.reply(response)
-  // }
-
-  // if (command === 'apostar') {
-  //   // Implemente o minigame de apostas aqui
-  // }
 })
 
-client.login(process.env.BOT_TOKEN) // Faça login com o token do seu bot
+client.login(process.env.BOT_TOKEN)
