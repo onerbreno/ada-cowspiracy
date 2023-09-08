@@ -1,5 +1,5 @@
 import Discord from 'discord.js'
-import { formatCurrency } from '../utils/formatCurrency';
+import { formatCurrency } from '../utils/formatCurrency'
 
 export const command = {
   name: 'trabalhar',
@@ -8,10 +8,6 @@ export const command = {
   async run({ client, message, userAccount, args }) {
     const response = userAccount.work()
 
-    const isEarnedMoney = response?.earnedMoney
-
-    const formatEarnedMoney = isEarnedMoney ? formatCurrency(response.earnedMoney) : null
-
     message.channel.send({
       embeds: [{
         color: Discord.resolveColor('8B09E5'),
@@ -19,8 +15,8 @@ export const command = {
           name: userAccount.name,
           icon_url: userAccount.avatarUrl
         },
-        description: isEarnedMoney ? `Você ganhou ${formatEarnedMoney}.` : 'Aguarde 10 segundos para trabalhar novamente.',
+        description: response,
       }]
-    });
+    })
   }
 }

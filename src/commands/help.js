@@ -23,7 +23,6 @@ export const command = {
         description: "### Lista de comandos",
         fields: commandsEmbed,
       }]
-    });
-
+    })
   }
 }
