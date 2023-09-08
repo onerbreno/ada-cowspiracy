@@ -8,8 +8,6 @@ export const command = {
   async run({ client, message, userAccount, args }) {
     const response = userAccount.getAccountInfo()
 
-    const balance = formatCurrency(response.balance)
-
     message.channel.send({
       embeds: [{
         color: Discord.resolveColor('8B09E5'),
@@ -20,7 +18,7 @@ export const command = {
         fields: [
           {
             name: 'Dinheiro',
-            value: balance,
+            value: response.balance,
             inline: false,
           },
           {
@@ -30,7 +28,7 @@ export const command = {
           }
         ]
       }]
-    });
+    })
 
   }
 }
