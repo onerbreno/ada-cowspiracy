@@ -2,7 +2,7 @@
 
 Cowspiracy é um bot de Discord desenvolvido utilizando a biblioteca Discord.js e seguindo princípios de programação orientada a objetos.
 
-Adicione o bot em seu servidor [aqui](https://discord.com/api/oauth2/authorize?client_id=1147505957551747082&permissions=8&scope=bot).
+Adicione o bot em seu servidor <a href="https://discord.com/api/oauth2/authorize?client_id=1147505957551747082&permissions=8&scope=bot" target="_blank">aqui</a>.
 
 
 ## Sobre o Projeto
