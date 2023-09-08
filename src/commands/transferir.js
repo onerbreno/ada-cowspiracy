@@ -9,7 +9,7 @@ export const command = {
     const usernameTarget = args[0]
     const amount = Number(args[1])
 
-    const response = userAccount.transferMoney(usernameTarget, amount)
+    const response = userAccount.transferMoney({ usernameTarget, amount })
 
     message.channel.send({
       embeds: [{
@@ -20,7 +20,6 @@ export const command = {
         },
         description: response
       }]
-    });
-    message.reply(response)
+    })
   }
 }
