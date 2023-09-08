@@ -1,6 +1,6 @@
 import path from 'node:path'
 import { readdirSync } from 'node:fs'
-import { pathToFileURL } from 'node:url';
+import { pathToFileURL } from 'node:url'
 
 export async function loadCommands() {
   const commands = new Map()

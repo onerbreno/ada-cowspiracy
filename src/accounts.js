@@ -2,8 +2,6 @@ import { formatCurrency } from "./utils/formatCurrency"
 
 const database = new Map()
 
-const usernames = new Set()
-
 class Entity {
   #id
   props
@@ -21,6 +19,7 @@ class Entity {
 export class Account extends Entity {
   #lastWorkTimestamp = 0
   #balance = 0
+  static TIME_INTERVAL_WORK = 10000
 
   constructor(props, id) {
     super(props, id)
@@ -38,42 +37,63 @@ export class Account extends Entity {
     return this.props.avatarUrl
   }
 
+  get balance() {
+    return this.#balance
+  }
+
+  set balance(amount) {
+    this.#balance = amount
+  }
+
   get canWork() {
-    const nextWork = this.#lastWorkTimestamp + 10000
+    const nextWork = this.#lastWorkTimestamp + Account.TIME_INTERVAL_WORK
     return nextWork <= Date.now()
   }
 
   work() {
     const dateNow = Date.now()
 
-    if ((dateNow - this.#lastWorkTimestamp) > 10000) {
+    if ((dateNow - this.#lastWorkTimestamp) > Account.TIME_INTERVAL_WORK) {
       const earnedMoney = Math.floor(Math.random() * 1000) + 1
-      this.#balance += earnedMoney
+      this.balance += earnedMoney
       this.#lastWorkTimestamp = dateNow
 
-      return {
-        earnedMoney
-      }
+      const formatEarnedMoney = formatCurrency(earnedMoney)
+      return `Você ganhou ${formatEarnedMoney}.`
     }
+
+    return `Aguarde 10 segundos para trabalhar novamente.`
   }
 
-  transferMoney(usernameTarget, amount) {
-    const target = Account.getByUsername(usernameTarget)
-
-    if (!target || !amount) {
-      return 'Conta alvo inválida'
+  checkTransactionConditions(amount) {
+    if (isNaN(amount)) {
+      return 'Passe todos os argumentos.'
     }
 
     if (amount <= 0) {
-      return `Valor não pode ser menor que zero.`
+      return 'Valor não pode ser menor que zero.'
     }
 
     if (this.#balance < amount) {
-      return `Saldo insuficiente na sua conta.`
+      return 'Saldo insuficiente na sua conta.'
     }
 
-    this.#balance -= amount
-    target.#balance += amount
+    return null
+  }
+
+  transferMoney({ usernameTarget, amount }) {
+    const amountError = this.checkTransactionConditions(amount)
+    if (amountError) {
+      return amountError
+    }
+    
+    const target = Account.getByUsername(usernameTarget)
+    if (!target) {
+      return 'Username inválido.'
+    }
+
+    this.balance -= amount
+    target.balance += amount
 
     return `Sua transação de ${formatCurrency(amount)} para **${usernameTarget}** foi feita com sucesso.`
   }
@@ -81,7 +101,7 @@ export class Account extends Entity {
   getAccountInfo() {
     return {
       ...this.props,
-      balance: this.#balance,
+      balance: formatCurrency(this.balance),
       lastWork: {
         date: this.#lastWorkTimestamp,
         time: new Date(this.#lastWorkTimestamp).getTime()
@@ -89,27 +109,36 @@ export class Account extends Entity {
     }
   }
 
-  placeBet(amount, userSelectedNumber) {
-    if (amount <= 0) {
-      return `Valor não pode ser menor que zero.`
+  placeBet({ userSelectedNumber, amount }) {
+    const amountError = this.checkTransactionConditions(amount)
+
+    if (userSelectedNumber === undefined) {
+      return 'Passe seu número da sorte.'
     }
 
-    if (this.#balance < amount) {
-      return `Saldo insuficiente na sua conta.`
+    if (userSelectedNumber < 1 || userSelectedNumber > 10) {
+      return 'Número da sorte inválido.'
     }
 
-    const drawNumber = Math.floor(Math.random() * 10) + 1
+    if (amountError) {
+      return amountError
+    }
 
-    return drawNumber
+    const drawNumber = Math.floor(Math.random() * 5) + 1
+    if (drawNumber === userSelectedNumber) {
+      const earnedBetMoney = amount * drawNumber
+      this.balance += earnedBetMoney
+      const formatEarnedBetMoney = formatCurrency(earnedBetMoney)
+
+      return `Você acertou! Ganhou ${formatEarnedBetMoney}!`
+    }
+
+    this.balance -= amount
+    return `Você perdeu! ${drawNumber}`
   }
 
   static create(newAccount) {
     database.set(newAccount.id, newAccount)
-    usernames.add(newAccount.username)
-  }
-
-  static has(id) {
-    return database.has(id)
   }
 
   static get(id) {
