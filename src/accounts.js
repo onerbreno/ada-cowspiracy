@@ -65,6 +65,22 @@ export class Account extends Entity {
     return `Aguarde 10 segundos para trabalhar novamente.`
   }
 
+  buy({ price }) {
+    if (isNaN(price)) {
+      return "Ocorreu um erro."
+    }
+
+    if (price <= 0) {
+      return "Ocorreu um erro."
+    }
+
+    if (this.#balance < price) {
+      return 'Saldo insuficiente na sua conta.'
+    }
+
+    this.balance -= price
+  }
+
   checkTransactionConditions(amount) {
     if (isNaN(amount)) {
       return 'Passe todos os argumentos.'
